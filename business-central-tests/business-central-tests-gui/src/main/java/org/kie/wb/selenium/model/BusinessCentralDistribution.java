@@ -19,13 +19,13 @@ package org.kie.wb.selenium.model;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public enum KieWbDistribution {
+public enum BusinessCentralDistribution {
 
-    KIE_WB,
+    BUSINESS_CENTRAL,
     BUSINESS_MONITORING;
 
-    public static Optional<KieWbDistribution> fromWarNameString(final String warName) {
-        return Stream.of(KieWbDistribution.values())
+    public static Optional<BusinessCentralDistribution> fromWarNameString(final String warName) {
+        return Stream.of(BusinessCentralDistribution.values())
                 .filter(distro -> distro.getWarName().equals(warName))
                 .findFirst();
     }

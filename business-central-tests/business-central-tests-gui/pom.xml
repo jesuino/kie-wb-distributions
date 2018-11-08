@@ -10,12 +10,12 @@
 
   <artifactId>business-central-tests-gui</artifactId>
 
-  <name>KIE (Drools) Workbench Tests :: GUI</name>
-  <description>GUI tests for Business Central and KIE Drools Workbench</description>
+  <name>Business Central Tests :: GUI</name>
+  <description>GUI tests for business-central and business-monitoring</description>
 
   <properties>
-    <app.name>kie-wb</app.name><!-- for tests to know if they are running against business-central or kie-drools-wb -->
-    <selenium.homepage.loading.timeout.seconds>15</selenium.homepage.loading.timeout.seconds>
+    <app.name>business-central</app.name><!-- for tests to know if they are running against business-central or business-monitoring -->
+    <selenium.homepage.loading.timeout.seconds>30</selenium.homepage.loading.timeout.seconds>
     <!-- default browser to be used by selenium tests -->
     <browser>firefox</browser>
     <!-- path to firefox binary specified externally via -Dwebdriver.firefox.bin=... -->
@@ -176,13 +176,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
-        <!-- Enable selenium UI tests to be run with Firefox.
-
-           Simple usage: mvn clean install -Pwildfly11,business-central (executes all Selenium GUI tests)
-           Complex usage: mvn clean install -Pwildfly11,business-central -Dit.test=LoginIntegrationTest
-                             -Dwebdriver.firefox.bin=<path-to-ff-binary> -Dselenium.homepage.loading.timeout.seconds=30
-
-           To use Internet Explorer see profile 'ie' -->
         <configuration>
           <systemPropertyVariables>
             <!-- directory where screenshots taken by webdriver will be placed -->
@@ -200,14 +193,14 @@
     <profile>
       <id>business-central</id>
       <properties>
-        <app.name>kie-wb</app.name>
+        <app.name>business-central</app.name>
       </properties>
     </profile>
 
     <profile>
       <id>business-monitoring</id>
       <properties>
-        <app.name>kie-wb</app.name>
+        <app.name>business-monitoring</app.name>
       </properties>
       <build>
         <plugins>
@@ -224,58 +217,9 @@
       </build>
     </profile>
 
-    <profile>
-      <!--  Enable selenium UI tests to be run with Internet Explorer.
-      Example usage: mvn clean install -Pwildfly11,business-central,selenium,ie -->
-      <id>ie</id>
-      <activation>
-        <property>
-          <name>ie</name>
-        </property>
-      </activation>
-      <properties>
-        <browser>internetExplorer</browser>
-      </properties>
-      <build>
-        <plugins>
-          <plugin> <!-- Downloads and unzips IEDriverServer.exe and then sets the
-            system property 'webdriver.ie.driver' needed to instantiate InternetExplorerDriver -->
-            <groupId>com.lazerycode.selenium</groupId>
-            <artifactId>driver-binary-downloader-maven-plugin</artifactId>
-            <version>1.0.7</version>
-            <configuration>
-              <!-- Where to download zips with selenium binaries -->
-              <downloadedZipFileDirectory>${java.io.tmpdir}/selenium_zips</downloadedZipFileDirectory>
-              <!-- Where to unzip browser specific binaries (IEDriverServer.exe, chromedriver) -->
-              <rootStandaloneServerDirectory>${project.build.directory}/selenium_binaries</rootStandaloneServerDirectory>
-              <!-- Config specifying download urls / md5 hashes for selenium binaries -->
-              <customRepositoryMap>${project.build.testOutputDirectory}/driver-binary-urls.xml</customRepositoryMap>
-            </configuration>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>selenium</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-failsafe-plugin</artifactId>
-            <configuration>
-              <systemPropertyVariables>
-                <!-- The following maven property is set by driver-binary-downloader-maven-plugin.
-                Copy it as system property for InternetExplorerDriver-->
-                <webdriver.ie.driver>${webdriver.ie.driver}</webdriver.ie.driver>
-              </systemPropertyVariables>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
-    <!-- Tests are disabled by default, but are automatically enabled when using specific profiles. So running
-         "mvn clean install" will _not_ execute the tests, but "mvn clean install -Pwildfly11,business-central" will. -->
+    <!-- Tests are disabled by default, but are automatically enabled when using specific profiles.
+         Running "mvn clean install" will _not_ execute the tests, but "mvn clean install -Pwildfly,business-central" will.
+    -->
     <profile>
       <id>disable-cargo-and-itests</id>
       <activation>

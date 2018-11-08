@@ -15,6 +15,8 @@
  */
 package org.kie.wb.selenium.model;
 
+import java.util.Arrays;
+
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.Arquillian;
@@ -35,12 +37,12 @@ public abstract class KieSeleniumTest {
     protected HomePerspective home;
     @Rule
     public ScreenshotOnFailure screenshotter = new ScreenshotOnFailure();
-    protected static final KieWbDistribution DISTRO = kieWbDistribution();
+    protected static final BusinessCentralDistribution DISTRO = getDistribution();
 
-    private static KieWbDistribution kieWbDistribution() {
+    private static BusinessCentralDistribution getDistribution() {
         String prop = System.getProperty("app.name");
-        return KieWbDistribution
+        return BusinessCentralDistribution
                 .fromWarNameString(prop)
-                .orElseThrow(() -> new IllegalStateException("Invalid app.name='" + prop + "' Expecting business-central or business-monitoring"));
+                .orElseThrow(() -> new IllegalStateException("Invalid app.name='" + prop + "' Expecting one of " + Arrays.asList(BusinessCentralDistribution.values())));
     }
 }
